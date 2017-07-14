@@ -1,0 +1,53 @@
+.message {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 90%;
+
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 10px 30px;
+
+  border-radius: 2px;
+
+  img {
+    width: 50px;
+    vertical-align: middle;
+    margin-left: 20px;
+  }
+
+  b {
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+
+  opacity: 0.0;
+  transition: all 0.2s ease-in-out;
+  pointer-events: none;
+
+  &.active {
+    opacity: 0.999;
+  }
+
+}
+
+#loading-message {
+
+  top: 20px;
+  &.active {
+    top: 30px;
+  }
+
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+#error-message {
+  padding: 20px 40px;
+  background-color: rgba(208, 68, 1, 0.8);
+
+  top: 40px;
+  &.active {
+    top: 60px;
+  }
+}
+

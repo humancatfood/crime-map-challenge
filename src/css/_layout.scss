@@ -1,0 +1,16 @@
+html, body, #app, #layout, #map {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#layout {
+  display: table;
+}
+
+#map {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}

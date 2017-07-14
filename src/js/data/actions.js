@@ -1,4 +1,4 @@
-import { fetchCrime } from './crime-service';
+import { fetchCrime } from './../crime-service';
 
 
 

@@ -1,3 +1,10 @@
+/**
+ * A thin wrapper around the data.police.uk api.
+ *
+ * Fetches crime-data within a rectangular area and returns it as a promise.
+ *
+ * If the area is too large and there is too much crime to display, it will throw an error.
+ */
 export const fetchCrime = async ({ north, east, south, west}) => {
 
   let response;

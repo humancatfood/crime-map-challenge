@@ -1,6 +1,9 @@
 import loadGoogleMapsAPI from 'load-google-maps-api';
 
 
+/**
+ * A helper class for the google-maps-api.
+ */
 export default class GoogleMapsHelper
 {
   constructor ()
@@ -12,6 +15,13 @@ export default class GoogleMapsHelper
     };
   }
 
+
+  /**
+   * Initialises the maps-api and returns a promise.
+   *
+   * @param element the dom-element that the map should be attached to.
+   * @return {Promise.<GoogleMapsHelper>} resolves the instance this has been called on.
+   */
   async init (element)
   {
     this.api = await loadGoogleMapsAPI({
@@ -29,6 +39,21 @@ export default class GoogleMapsHelper
   }
 
 
+  /**
+   * Updates the heatmap with a list of data-points in the shape of
+   *
+   * [{
+   *   latitude: 123.08876,
+   *   longitude; 456.09876
+   * }, {
+   *   latitude: 789.1322,
+   *   longitude; 322.12231
+   * }, {
+   *  etc ..
+   * }]
+   *
+   * @param data
+   */
   updateHeatMap (data)
   {
     this.assertIsInitialised();
@@ -40,6 +65,15 @@ export default class GoogleMapsHelper
     });
   }
 
+  /**
+   * Returns the current bounding box of the map in the shape of
+   * {
+   *   north: 12124.123,
+   *   east: 23042.32,
+   *   south: 23090323,
+   *   west: 304184.1232
+   * }
+   */
   getBounds ()
   {
     this.assertIsInitialised();
@@ -50,6 +84,12 @@ export default class GoogleMapsHelper
     }
   }
 
+  /**
+   * Attaches a listener callback to the map that receives the map's bounding box when
+   * the user pans or zooms the map or resizes the window.
+   *
+   * @param listener a function that receives the bounding box like this { north, east, south, west}
+   */
   onBoundsChanged (listener)
   {
     this.map.addListener('bounds_changed', () => {

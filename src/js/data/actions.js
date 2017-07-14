@@ -4,9 +4,34 @@ import { fetchCrime } from './../crime-service';
 
 export const ACTIONS = {
   LOAD_CRIME: 'LOAD_CRIME',
-  CRIME_LOADED: 'CRIME_LOADED',
+  RECEIVE_CRIME: 'RECEIVE_CRIME',
 
-  ERROR: 'ERROR'
+  PUSH_ERROR: 'PUSH_ERROR',
+  POP_ERROR: 'POP_ERROR'
+};
+
+
+export const receiveCrime = crimes => ({
+  type: ACTIONS.RECEIVE_CRIME,
+  payload: {
+    crimes
+  }
+});
+
+
+export const pushError = error => dispatch => {
+
+  dispatch({
+    type: ACTIONS.PUSH_ERROR,
+    payload: {
+      error
+    }
+  });
+
+  setTimeout(() => dispatch({
+    type: ACTIONS.POP_ERROR
+  }), 2000);
+
 };
 
 
@@ -19,22 +44,12 @@ export const updateCrime = bounds => async dispatch => {
   try
   {
     const crimes = await fetchCrime(bounds);
-    dispatch({
-      type: ACTIONS.CRIME_LOADED,
-      payload: {
-        crimes
-      }
-    });
+    dispatch(receiveCrime(crimes));
   }
   catch (error)
   {
     window.console.error(error);
-    dispatch({
-      type: ACTIONS.ERROR,
-      payload: {
-        error: error.message
-      }
-    });
+    dispatch(pushError(error.message));
   }
 
 };

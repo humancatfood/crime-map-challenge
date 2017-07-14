@@ -19,17 +19,24 @@ export default (state=defaultStatusState, action) => {
         loading: true
       };
 
-    case ACTIONS.CRIME_LOADED:
+    case ACTIONS.RECEIVE_CRIME:
       return {
         ...state,
         loading: false
       };
 
-    case ACTIONS.ERROR:
+    case ACTIONS.PUSH_ERROR:
       return {
         ...state,
         loading: false,
         error: action.payload.error
+      };
+
+    case ACTIONS.POP_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: null
       };
 
     default:

@@ -12,7 +12,7 @@ export default (state=defaultCrimeState, action) => {
   switch (action.type)
   {
 
-    case ACTIONS.CRIME_LOADED:
+    case ACTIONS.RECEIVE_CRIME:
       return {
         ...state,
         crimes: action.payload.crimes

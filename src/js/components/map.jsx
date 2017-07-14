@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import loadGoogleMapsAPI from 'load-google-maps-api';
 import debounce from 'lodash/debounce';
 
+import GoogleMapsHelper from './../google-maps-helper';
 import { updateCrime } from './../data/actions';
 
 
@@ -50,36 +50,13 @@ export default class Map extends React.Component
 
     try
     {
-      this.state = {
-        msg: 'Loading Google Maps API ..'
-      };
+      this.setState({ msg: 'Loading Google Maps API ..' });
 
-      const googleMaps = await loadGoogleMapsAPI({
-        key: ENV.API_KEY,
-        libraries: ['visualization']
-      });
+      this.mapHelper = await new GoogleMapsHelper().init(this.refs.mapwrapper);
+      this.mapHelper.onBoundsChanged(bounds => this._updateCrimeFromMap(bounds));
+      this._updateCrimeFromMap(this.mapHelper.getBounds());
 
-      this.setState({
-        api: googleMaps,
-        msg: 'Setting up map ..'
-      });
-
-      const map = await this._setupMap(googleMaps, this.refs.mapwrapper);
-
-      this.setState({
-        map: map,
-        msg: 'Setting up heatmap ..'
-      });
-
-      const heatmap = await this._setupHeatmap(googleMaps, map);
-
-      this.setState({
-        heatmap: heatmap,
-        msg: 'Setting up event listeners ..'
-      });
-
-      this._setupEventListeners(map);
-      this._updateCrimeFromMap(map);
+      this.setState({ msg: null });
 
     }
     catch (error)
@@ -91,54 +68,15 @@ export default class Map extends React.Component
     }
   }
 
-  _setupMap (googleMaps, element)
-  {
-    return new googleMaps.Map(element, {
-      center: {
-        lat: 51.5033,
-        lng: -0.1195
-      },
-      zoom: 15,
-      minZoom: 13
-    });
-  }
 
-  _setupHeatmap (googleMaps, map)
+  _updateCrimeFromMap ({ north, east, south, west })
   {
-    const heatmap = new googleMaps.visualization.HeatmapLayer({
-      opacity: 0.4,
-      radius: 50,  // making it look nice and scary :D
-      dissipating: true,
-      data: []
-    });
-    heatmap.setMap(map);
-    return heatmap;
-  }
-
-  _setupEventListeners (map)
-  {
-    map.addListener('bounds_changed', () => this._updateCrimeFromMap(map));
-  }
-
-  _updateCrimeFromMap (map)
-  {
-    const bounds = map.getBounds();
-    if (bounds)
-    {
-      const { north, east, south, west } = bounds.toJSON();
-      this.props.updateCrime({ north, east, south, west });
-    }
+    this.props.updateCrime({ north, east, south, west });
   }
 
   _updateHeatMap (crimes)
   {
-    const { heatmap, api: { LatLng } } = this.state;
-
-    heatmap.data.clear();
-    crimes.forEach(crime => {
-      const {latitude, longitude} = crime.location;
-      heatmap.data.push(new LatLng(latitude, longitude));
-    });
+    this.mapHelper.updateHeatMap(crimes.map(crime => crime.location));
   }
 
 }

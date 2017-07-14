@@ -32,7 +32,7 @@ export const updateCrime = bounds => async dispatch => {
     dispatch({
       type: ACTIONS.ERROR,
       payload: {
-        errorMessages: ['Can\'t load crime :\'(', 'Check in the debug-console for details']
+        error: error.message
       }
     });
   }

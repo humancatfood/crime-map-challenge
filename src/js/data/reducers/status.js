@@ -3,8 +3,8 @@ import { ACTIONS } from '../actions';
 
 
 export const defaultStatusState = {
-  fetching: false,
-  errorMessages: []
+  loading: false,
+  error: null
 };
 
 
@@ -16,20 +16,20 @@ export default (state=defaultStatusState, action) => {
     case ACTIONS.LOAD_CRIME:
       return {
         ...state,
-        fetching: true
+        loading: true
       };
 
     case ACTIONS.CRIME_LOADED:
       return {
         ...state,
-        fetching: false
+        loading: false
       };
 
     case ACTIONS.ERROR:
       return {
         ...state,
-        fetching: false,
-        errorMessages: action.payload.errorMessages
+        loading: false,
+        error: action.payload.error
       };
 
     default:

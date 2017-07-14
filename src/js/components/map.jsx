@@ -1,8 +1,17 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import loadGoogleMapsAPI from 'load-google-maps-api';
+import debounce from 'lodash/debounce';
+
+import { updateCrime } from './../data/actions';
 
 
 
+@connect(store => ({
+  store
+}), {
+  updateCrime
+})
 export default class Map extends React.Component
 {
 
@@ -13,6 +22,8 @@ export default class Map extends React.Component
     this.state = {
       msg: 'Loading Map ..'
     };
+
+    this._updateCrimeMap = debounce(this._updateCrimeMap, 500);
   }
 
   componentDidMount ()
@@ -23,7 +34,9 @@ export default class Map extends React.Component
     };
 
     loadGoogleMapsAPI(mapOptions)
-      .then(googleMaps => this._setupMap(googleMaps))
+      .then(googleMaps => this._setupMap(googleMaps, this.refs.mapwrapper))
+      .then(map => this._setupEventListeners(map))
+      .then(map => this._updateCrimeMap(map))
       .catch(error => {
         window.console.error(error);
         this.setState({
@@ -45,18 +58,33 @@ export default class Map extends React.Component
   }
 
 
-  _setupMap (googleMaps)
+  _setupMap (googleMaps, element)
   {
-    this.setState({
-      msg: null,
-      map: new googleMaps.Map(this.refs.mapwrapper, {
-        center: {
-          lat: 51.5033,
-          lng: -0.1195
-        },
-        zoom: 13
-      })
+    return new googleMaps.Map(element, {
+      center: {
+        lat: 51.5033,
+        lng: -0.1195
+      },
+      zoom: 15,
+      minZoom: 15
     });
+  }
+
+  _setupEventListeners (map)
+  {
+    map.addListener('bounds_changed', () => this._updateCrimeMap(map));
+    return map;
+  }
+
+  _updateCrimeMap (map)
+  {
+    const bounds = map.getBounds();
+    if (bounds)
+    {
+      const { north, east, south, west } = bounds.toJSON();
+      console.log("update");
+      this.props.updateCrime({ north, east, south, west });
+    }
   }
 
 }

@@ -127,6 +127,7 @@ const development = {
   plugins: [
     new webpack.DefinePlugin({
       'ENV.DEBUG': true,
+      'ENV.API_KEY': JSON.stringify(pkg.apiKeys.development),
       'process.env.BABEL_ENV': 'development'
     }),
     new webpack.HotModuleReplacementPlugin()
@@ -142,6 +143,7 @@ const production = {
     }),
     new webpack.DefinePlugin({
       'ENV.DEBUG': false,
+      'ENV.API_KEY': JSON.stringify(pkg.apiKeys.production),
       'process.env.BABEL_ENV': 'build'
     })
   ]

@@ -14,6 +14,7 @@
   },
   "homepage": "https://github.com/humancatfood/crime-map-challenge#readme",
   "dependencies": {
+    "load-google-maps-api": "^1.0.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.5",
@@ -54,5 +55,9 @@
     "start": "webpack-dev-server --progress --colors",
     "build": "webpack -p --progress --colors",
     "deploy": "gh-pages-deploy"
+  },
+  "apiKeys": {
+    "development": "AIzaSyA5bZQDzXkEJ_MdmBBab_S0seS1ITAjJj8",
+    "production": "AIzaSyDBjazFbNLoJ0zDtg-BgRbKrcXZCqsDEBU"
   }
 }

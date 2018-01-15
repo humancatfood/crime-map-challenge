@@ -17,7 +17,7 @@ How to run:
 
 ```
 
-Then open a browser and navigate to `localhost:3000` (in dev-mode, the maps-api is restricted to `l`ocalhost`, so `127.0.0.1` etc won't work)
+Then open a browser and navigate to `localhost:3000` (in dev-mode, the maps-api is restricted to `localhost`, so `127.0.0.1` etc won't work)
 
 OR
 
